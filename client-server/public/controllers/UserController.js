@@ -121,26 +121,16 @@ class UserController {
     )
   }
   selectAll() {
-    // let users = User.getUsersStorage();
-
-    let ajax =  new XMLHttpRequest();
-
-    ajax.open('GET', '/users');
-    ajax.onload =  event => {
-      let obj = { users: [] };
-      try {
-        obj = JSON.parse(ajax.responseText);
-      } catch(e) {
-        console.error(e);
-      }
-      obj.users.forEach(dataUser => {
-        let user = new User()
-        user.loadFromJSON(dataUser)
-        this.addLine(user)
-      });
-    };
-    ajax.send();
+    
+      HttpRequest.get('/users').then(data => {
+        data.users.forEach(dataUser => {
+          let user = new User()
+          user.loadFromJSON(dataUser)
+          this.addLine(user);
+        })
+      })
   }
+
   getTr(userData, tr = null){
     if (tr === null) tr = document.createElement('tr');
     tr.dataset.user = JSON.stringify(userData)
