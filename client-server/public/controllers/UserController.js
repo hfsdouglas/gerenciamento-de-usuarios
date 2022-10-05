@@ -124,15 +124,15 @@ class UserController {
       user.admin
     )
   }
+  
   selectAll() {
-    
-      HttpRequest.get('/users').then(data => {
-        data.users.forEach(dataUser => {
-          let user = new User()
-          user.loadFromJSON(dataUser)
-          this.addLine(user);
-        })
+    User.getUsersStorage().then(data => {
+      data.users.forEach(dataUser => {
+        let user = new User()
+        user.loadFromJSON(dataUser)
+        this.addLine(user);
       })
+    })
   }
 
   getTr(userData, tr = null){
@@ -166,10 +166,11 @@ class UserController {
       if(confirm("Deseja realmente excluir?")){
         let user = new User()
         user.loadFromJSON(JSON.parse(tr.dataset.user))
-        user.remove()
-        tr.remove()
-        //Remove a linha que foi criada.
-        this.updateCount()
+        user.remove().then(data => {
+          tr.remove()
+          //Remove a linha que foi criada.
+          this.updateCount()
+        })
       }
     })
     tr.querySelector(".btn-edit").addEventListener("click", e => {
