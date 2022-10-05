@@ -1,5 +1,3 @@
-const { param } = require("../../routes/users")
-
 class HttpRequest {
     static get(url, params = {}) {
         return HttpRequest.request('GET', url, params)

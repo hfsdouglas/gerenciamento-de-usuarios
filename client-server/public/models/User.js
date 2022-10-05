@@ -61,6 +61,7 @@ class User {
   }
   
   toJSON() {
+    let json = {}
     Object.keys(this).forEach(key => {
       if (this[key] !== undefined) json[key] = this[key]
     })
