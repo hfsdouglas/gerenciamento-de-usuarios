@@ -51,7 +51,7 @@ class User {
           this[name] = new Date(json[name])
         break;
         default:
-          this[name] = json[name]
+          if (name.substring(0, 1) === "_") this[name] = json[name]
       }   
     }
   }
@@ -69,24 +69,31 @@ class User {
     localStorage.setItem("usersID", usersID)
     return usersID
   }
-  save() {
-    let users = User.getUsersStorage()
-    if (this.id > 0) {
-      users.map(u=>{
-        if (u._id == this.id) {
-          Object.assign(u, this);
-        }
-        return u;
-      })
-      
-    } else {
-      this._id = this.getNewId();
-      users.push(this)
-      /*Para armazenar os dados em sessão:
-      sessionStorage.setItem("users", JSON.stringify(users))*/
-    }
-    localStorage.setItem("users", JSON.stringify(users))
+
+  toJSON() {
+    Object.keys(this).forEach(key => {
+      if (this[key] !== undefined) json[key] = this[key]
+    })
+    return json
   }
+
+  save() {
+    return new Promise((resolve, reject) => {
+      let promise
+      if (this.id) {
+        promise = HttpRequest.put(`/users/${this.id}`, this.toJSON())
+      } else {
+        promise = HttpRequest.post(`/users/`, this.toJSON())
+      }
+      promise.then(data => {
+        this.loadFromJSON(data);
+        resolve(this)
+      }).catch(e => {
+          reject(e)
+      })
+    })
+  }
+
   remove() {
     let users = User.getUsersStorage()
     users.forEach((userData, index) => {
