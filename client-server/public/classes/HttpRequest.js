@@ -1,3 +1,5 @@
+const { param } = require("../../routes/users")
+
 class HttpRequest {
     static get(url, params = {}) {
         return HttpRequest.request('GET', url, params)
@@ -25,8 +27,9 @@ class HttpRequest {
                 reject(e);
             }
             ajax.onload = event => {
-                let obj = { users: [] }
+                let obj = {}
                 try {
+                    console.log(ajax.responseText)
                     obj = JSON.parse(ajax.responseText)
                 } catch(e) {
                     reject(e)

@@ -1,6 +1,6 @@
 class User {
-  constructor(name, gender, birth, country, email, password, photo, admin, id) {
-    this._id = id
+  constructor(name, gender, birth, country, email, password, photo, admin) {
+    this._id 
     this._name = name
     this._gender = gender
     this._birth = birth
@@ -57,7 +57,7 @@ class User {
     }
   }
   static getUsersStorage() {
-    return HttpRequest.get('/users')
+    return Fetch.get('/users')
   }
   
   toJSON() {
@@ -72,9 +72,9 @@ class User {
     return new Promise((resolve, reject) => {
       let promise
       if (this.id) {
-        promise = HttpRequest.put(`/users/${this.id}`, this.toJSON())
+        promise = Fetch.put(`/users/${this.id}`, this.toJSON())
       } else {
-        promise = HttpRequest.post(`/users/`, this.toJSON())
+        promise = Fetch.post(`/users`, this.toJSON())
       }
       promise.then(data => {
         this.loadFromJSON(data);
@@ -86,6 +86,6 @@ class User {
   }
 
   remove() {
-    return HttpRequest.delete(`/users/${this.id}`)
+    return Fetch.delete(`/users/${this.id}`)
   }
 }

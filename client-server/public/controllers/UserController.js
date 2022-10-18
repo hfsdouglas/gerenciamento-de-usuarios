@@ -9,7 +9,7 @@ class UserController {
   }
   onEdit() {
     document.querySelector("#box-user-update .cancel").addEventListener("click", e => {
-      this.showPanelUpdate()
+      this.showPanelCreate()
     })
     this.formUpdateEl.addEventListener("submit", e => {
       e.preventDefault()
@@ -34,13 +34,12 @@ class UserController {
           let user = new User()
           user.loadFromJSON(result)
           user.save().then(user => {
-            tr = this.getTr(user, tr)
+            this.getTr(user, tr)
             this.updateCount()
             this.formUpdateEl.reset()
             btn.disabled = false
             this.showPanelCreate()
           })
-          
         }, 
         (e) => {
           console.error(e)
@@ -61,8 +60,7 @@ class UserController {
             this.addLine(user)
             this.formEl.reset()
             btn.disabled = false
-          });
-          
+          })
         }, 
         (e) => {
           console.error(e)
